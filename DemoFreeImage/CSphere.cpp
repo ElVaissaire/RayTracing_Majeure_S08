@@ -13,6 +13,11 @@ CSphere::CSphere(Vector3* coord, float rayon)
 	m_rayon = rayon;
 }
 
+void CSphere::setMaterial(CMaterial *m)
+{
+	m_m = m;
+}
+
 Vector3 CSphere::getCoord()
 {
 	return *m_coord;

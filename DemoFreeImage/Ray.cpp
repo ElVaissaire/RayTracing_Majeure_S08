@@ -29,7 +29,11 @@ bool Ray::intersection(CSphere* s)
 
 	float discriminant = t1 * t1 - 4.0f * (t2 * t0);
 
-	if (discriminant > 0)
+	if (discriminant == 0)
+	{
+		return true;
+	}
+	else if(discriminant > 0)
 	{
 		return true;
 	}

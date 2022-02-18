@@ -3,6 +3,8 @@
 #include "CCamera.h"
 #include "CSphere.h"
 #include "Ray.h"
+#include "CLight.h"
+#include "CMaterial.h"
 
 int main(int argc, char** argv)
 {
@@ -23,17 +25,16 @@ int main(int argc, char** argv)
 	h = c->getHeight();
 
 	//2eme étape
-	/*
-	CLight *l1 = new CLight(2.5f, 2.5f, -2.5f, 255, 255, 255);
+	
+	Vector3* l1_pos = new Vector3(2.5f, 2.5f, -2.5f);
+	CLight *l1 = new CLight(l1_pos, 255, 255, 255);
 	CMaterial *m1 = new CMaterial(0, 0, 255, 0.5f, 0.7f, 0.3f, 21.0f);
-	s1->SetMaterial(m1);
-	s2->SetMaterial(m1);//*/
+	s1->setMaterial(m1);
+	s2->setMaterial(m1);
 
 	//3ème étape
 	// On ajoute des objets, des lumières
 
-
-//	image = FreeImage_Allocate(256, 256, 32);
 	image = FreeImage_Allocate(w, h, 32);
 
 	white.rgbBlue = 255;
@@ -47,11 +48,18 @@ int main(int argc, char** argv)
 	color.rgbGreen = (BYTE)0;
 	for (int i = 0; i < w; i++)
 	{
-		color.rgbRed = i;
-
 		for (int j = 0; j < h; j++)
 		{
-			color.rgbBlue = (BYTE)j;
+			// --- 1ere étape ---
+			// On définit les valeurs de ray (dx, dy et dz)
+
+			//Y a t'il intersection entre ray et s1
+			//Si oui
+			//		FreeImage_SetPixelColor(image, i, j, &white);
+			// sinon
+			//		FreeImage_SetPixelColor(image, i, j, &black);
+
+
 			Vector3* r_origin = new Vector3(0.0f, 0.0f, 0.0f);
 			Vector3* r_direction = new Vector3(0.0f, 0.0f, 0.0f);
 			Vector3* pix_position = new Vector3(i-(c->getWidth()/2.0f), j - (c->getHeight()/2.0f), - c->getFocale());
@@ -69,17 +77,6 @@ int main(int argc, char** argv)
 				FreeImage_SetPixelColor(image, i, j, &black);
 			}
 
-
-
-
-			// --- 1ere étape ---
-			// On définit les valeurs de ray (dx, dy et dz)
-
-			//Il y a t'il intersection entre ray et s1
-			//Si oui
-			//		FreeImage_SetPixelColor(image, i, j, &white);
-			// sinon
-			//		FreeImage_SetPixelColor(image, i, j, &black);
 			
 			// --- 2ème étape ---
 			// On calcul les intersections
