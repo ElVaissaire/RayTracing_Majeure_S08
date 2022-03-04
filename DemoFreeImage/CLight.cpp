@@ -15,3 +15,8 @@ CLight::CLight(Vector3* position, int red, int green, int blue)
 	m_green = green;
 	m_blue = blue;
 }
+
+Vector3 *CLight::getCoord()
+{
+	return m_pos;
+}

@@ -150,6 +150,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CLight.cpp" />
+    <ClCompile Include="CMaterial.cpp" />
     <ClCompile Include="CSphere.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Ray.cpp" />
@@ -157,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CLight.h" />
+    <ClInclude Include="CMaterial.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="CSphere.h" />

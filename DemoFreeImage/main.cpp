@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	FIBITMAP* image;
 	int w=0, h=0;
 
-	//1er étape
+	//1ere étape
 	
 	CCamera *c = new CCamera(640, 480, 90.0f);
 	Vector3 *s1_position = new Vector3(0.0f, 0.0f, -5.0f);
@@ -60,6 +60,17 @@ int main(int argc, char** argv)
 			//		FreeImage_SetPixelColor(image, i, j, &black);
 
 
+			// --- 2ème étape ---
+			// On calcule les intersections
+			// On cherche la plus proche
+			//
+			// On envoie un rayon de ce point d'intersection (x0, y0, z0) vers la lumière l1
+			// On recherche encore les intersection
+			// Si pas d'intersection ENTRE LES POINTS
+			//		On calcule la couleur avec ka*Ia + kd*Id + ks*Is
+			// Sinon
+			//		On calcule le couleur avec seulement ka*Ia
+
 			Vector3* r_origin = new Vector3(0.0f, 0.0f, 0.0f);
 			Vector3* r_direction = new Vector3(0.0f, 0.0f, 0.0f);
 			Vector3* pix_position = new Vector3(i-(c->getWidth()/2.0f), j - (c->getHeight()/2.0f), - c->getFocale());
@@ -68,26 +79,25 @@ int main(int argc, char** argv)
 			
 			Ray *r = new Ray(r_origin, r_direction);
 			
-			if (r->intersection(s1))
+			//S'il y a une intersection avec s1
+			if (r->intersection(s1) != NULL)
 			{
-				FreeImage_SetPixelColor(image, i, j, &white);
+				Vector3* new_r_direction = new Vector3(0.0f, 0.0f, 0.0f);
+				new_r_direction = r->intersection(s1)->vectorDirection(l1_pos);
+				Ray *new_r = new Ray(r->intersection(s1), new_r_direction);
+				
+				if (!new_r->intersectionLight(l1)) //s'il n'y a pas d'objet entre la lumière et la sphère
+				{
+					FreeImage_SetPixelColor(image, i, j, &white);
+				}
 			}
-			else
+			else //S'il n'y en a pas
 			{
 				FreeImage_SetPixelColor(image, i, j, &black);
 			}
 
 			
-			// --- 2ème étape ---
-			// On calcul les intersections
-			// On cherche la plus proche
-			//
-			// On envoie un rayon de ce point d'intersection (x0, y0, z0) vers la lumière l1
-			// On recherche encore les intersection
-			// Si pas d'intersection ENTRE LES POINTS
-			//		On calcul la couleur avec ka*Ia + kd*Id + ks*Is
-			// Sinon
-			//		On calcul le couleur avec seulement ka*Ia
+			
 
 //			FreeImage_SetPixelColor(image, i, j, &color);
 		}
