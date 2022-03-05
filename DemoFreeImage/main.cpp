@@ -29,8 +29,9 @@ int main(int argc, char** argv)
 	Vector3* l1_pos = new Vector3(2.5f, 2.5f, -2.5f);
 	CLight *l1 = new CLight(l1_pos, 255, 255, 255);
 	CMaterial *m1 = new CMaterial(0, 0, 255, 0.5f, 0.7f, 0.3f, 21.0f);
+	CMaterial *m2 = new CMaterial(255, 0, 255, 0.4f, 0.8f, 0.5f, 21.0f);
 	s1->setMaterial(m1);
-	s2->setMaterial(m1);
+	s2->setMaterial(m2);
 
 	//3ème étape
 	// On ajoute des objets, des lumières
@@ -92,7 +93,13 @@ int main(int argc, char** argv)
 				
 				if (!new_r->intersectionLight(l1)) //s'il n'y a pas d'objet entre la lumière et la sphère
 				{
+					//maintenant il faut calculer la couleur avec l'équation de Blinn-Phong
+					//I = ka*Ia + kd*Id + ks*Is
 					FreeImage_SetPixelColor(image, i, j, &white);
+				}
+				else
+				{
+					//couleur = ka*Ia
 				}
 			}
 			//Ou s'il y a une intersection avec s2
@@ -102,12 +109,16 @@ int main(int argc, char** argv)
 				new_r_direction = r->intersection(s2)->vectorDirection(l1_pos);
 				Ray* new_r = new Ray(r->intersection(s2), new_r_direction);
 
-				if (!new_r->intersectionLight(l1)) //s'il n'y a pas d'objet entre la lumière et la sphère
+				if (!new_r->intersectionLight(l1))
 				{
 					FreeImage_SetPixelColor(image, i, j, &purple);
 				}
 			}
-			else //S'il n'y en a pas
+
+			//Pour ajouter encore plus d'objets à la scène, il suffit de rajouter 
+			//ce bloc ci-dessus autant de fois qu'on le souhaite avec la sphère adaptée
+			
+			else //S'il n'y a pas d'intersection
 			{
 				FreeImage_SetPixelColor(image, i, j, &black);
 			}
