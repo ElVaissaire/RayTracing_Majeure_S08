@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	RGBQUAD color;
-	RGBQUAD black, white;
+	RGBQUAD black, white, purple;
 	FIBITMAP* image;
 	int w=0, h=0;
 
@@ -41,6 +41,10 @@ int main(int argc, char** argv)
 	white.rgbGreen = 255;
 	white.rgbRed = 255;
 
+	purple.rgbBlue = 255;
+	purple.rgbGreen = 0;
+	purple.rgbRed = 255;
+
 	black.rgbBlue = 0;
 	black.rgbGreen = 0;
 	black.rgbRed = 0;
@@ -65,11 +69,11 @@ int main(int argc, char** argv)
 			// On cherche la plus proche
 			//
 			// On envoie un rayon de ce point d'intersection (x0, y0, z0) vers la lumière l1
-			// On recherche encore les intersection
+			// On recherche encore les intersections
 			// Si pas d'intersection ENTRE LES POINTS
-			//		On calcule la couleur avec ka*Ia + kd*Id + ks*Is
+			//		> On calcule la couleur avec ka*Ia + kd*Id + ks*Is
 			// Sinon
-			//		On calcule le couleur avec seulement ka*Ia
+			//		> On calcule le couleur avec seulement ka*Ia
 
 			Vector3* r_origin = new Vector3(0.0f, 0.0f, 0.0f);
 			Vector3* r_direction = new Vector3(0.0f, 0.0f, 0.0f);
@@ -89,6 +93,18 @@ int main(int argc, char** argv)
 				if (!new_r->intersectionLight(l1)) //s'il n'y a pas d'objet entre la lumière et la sphère
 				{
 					FreeImage_SetPixelColor(image, i, j, &white);
+				}
+			}
+			//Ou s'il y a une intersection avec s2
+			else if (r->intersection(s2) != NULL)
+			{
+				Vector3* new_r_direction = new Vector3(0.0f, 0.0f, 0.0f);
+				new_r_direction = r->intersection(s2)->vectorDirection(l1_pos);
+				Ray* new_r = new Ray(r->intersection(s2), new_r_direction);
+
+				if (!new_r->intersectionLight(l1)) //s'il n'y a pas d'objet entre la lumière et la sphère
+				{
+					FreeImage_SetPixelColor(image, i, j, &purple);
 				}
 			}
 			else //S'il n'y en a pas
